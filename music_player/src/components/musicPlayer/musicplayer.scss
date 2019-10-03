@@ -1,0 +1,77 @@
+.musicPlayerBlock {
+    position: absolute;
+    left: 40%;
+    top: 30%;
+    //color:black;
+    background-color: #eef3f7;
+    width: 300px;
+    height: 350px;
+    border-radius: 15px;
+    box-shadow: 0.5px 3px 4px 1px #bec0c1;
+
+    & .musicPlayerImage{
+        position: absolute;
+        border-radius: 15px;
+        width: 75%;
+        height: 50%;
+        left: 12%;
+        top: -10%;
+        box-shadow: 0px 10px 40px 0px rgba(90, 78, 177, 0.5);
+    }
+
+    & .musicPlayerSlider{
+        position: absolute;
+        top: 90%;
+        width: 80%;
+        left: 10%;
+        height: 2px;
+        background-color: gray;
+        
+        & p {
+            color: gray;
+            font-size: 11px;
+        }
+
+        & .musicPlayerSliderTimeIndicator {
+            position: absolute;
+            color: gray;
+            background-color: gray;
+            width: 1px;
+            height: 10px;
+            left: 0;
+            margin-top: -4px;
+            z-index: 2;
+
+            &:hover{
+                cursor: pointer;
+            }
+        }
+
+        & .musicPlayerSliderTime{
+            position: absolute;
+            left: 90%;
+            bottom: 10%;
+        }
+
+        & .musicPlayerSliderCurrentTime{
+            position: absolute;
+            left: 0;
+            bottom: 10%;
+        }
+    }
+
+    & .musicPlayerPlayButton{
+        position: absolute;
+        width: 25px;
+        height: auto;
+        top: 75%;
+        left: 45%;
+        fill: gray;
+    }
+
+    & .musicPlayerSongTitle{
+        position: absolute;
+        left: 36.5%;
+        top: 50%;
+    }
+}
