@@ -26,6 +26,10 @@
         left: 10%;
         height: 2px;
         background-color: gray;
+
+        &:hover{
+            cursor: pointer;
+        }
         
         & p {
             color: gray;
@@ -67,6 +71,23 @@
         top: 75%;
         left: 45%;
         fill: gray;
+
+        &hide{
+            display: none;
+        }
+    }
+
+    & .musicPlayerPauseButton{
+        position: absolute;
+        width: 25px;
+        height: auto;
+        top: 75%;
+        left: 45%;
+        fill: blue;
+
+        &hide{
+            display: none;
+        }
     }
 
     & .musicPlayerSongTitle{
