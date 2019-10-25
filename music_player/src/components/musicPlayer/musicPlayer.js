@@ -3,24 +3,33 @@ import soundFile from "../../public/songs/Kendrick_Lamar-Money_Trees.mp3";
 
 import "./musicplayer.scss";
 
-function startAudio() {
-  var element = document.getElementsByClassName("musicPlayerPlayButton");
-  var audio = new Audio(soundFile);
-  audio.play();
+var audioFile = new Audio(soundFile);
+console.log(audioFile);
 
-  element.className += "hide";
+/* make play and pause function into 1 function that does both */
+function startAudio() {
+  var playElement = document.getElementById("musicPlayerPlayButton");
+  var pauseElement = document.getElementById("musicPlayerPauseButton");
+
+  audioFile.play();
+
+  playElement.classList += "hide";
+  pauseElement.classList = "musicPlayerPauseButton";
 }
 
 function pauseAudio() {
-  document.getElementsByClassName("musicPlayerPlayButton");
-  var audio = new Audio(soundFile);
-  audio.pause();
+  var pauseElement = document.getElementById("musicPlayerPauseButton");
+  var playElement = document.getElementById("musicPlayerPlayButton");
+
+  audioFile.pause();
+
+  pauseElement.classList += "hide";
+  playElement.classList = "musicPlayerPlayButton";
 }
 
 function musicPlayer() {
   const selectedSong = "Kendrick_Lamar-Money_Trees.mp3";
   const audioSource = "../../public/songs/" + selectedSong;
-  console.log(audioSource);
 
   return (
     <div className="musicPlayerBlock">
@@ -31,7 +40,6 @@ function musicPlayer() {
       />
 
       {/* Range Slider */}
-      {/* <div className="musicPlayerSliderPadding"> */}
       <div className="musicPlayerSlider">
         <div className="musicPlayerSliderTime">
           <p>4:30</p>
@@ -44,11 +52,13 @@ function musicPlayer() {
           id="musicPlayerSliderTimeIndicator"
         />
       </div>
-      {/* </div> */}
 
       {/* Play button */}
-
-      <div className="musicPlayerPlayButton" onClick={startAudio}>
+      <div
+        className="musicPlayerPlayButton"
+        id="musicPlayerPlayButton"
+        onClick={startAudio}
+      >
         <audio id="audio" src={soundFile} />
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
           <polygon
@@ -61,7 +71,11 @@ function musicPlayer() {
           />
         </svg>
       </div>
-      <div className="musicPlayerPauseButtonhide" onClick={pauseAudio}>
+      <div
+        className="musicPlayerPauseButtonhide"
+        id="musicPlayerPauseButton"
+        onClick={pauseAudio}
+      >
         <audio id="audio" src={soundFile} />
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
           <polygon

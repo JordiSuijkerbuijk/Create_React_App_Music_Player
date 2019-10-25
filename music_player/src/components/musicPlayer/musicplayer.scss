@@ -1,8 +1,6 @@
 .musicPlayerBlock {
     position: absolute;
-    left: 40%;
     top: 30%;
-    //color:black;
     background-color: #eef3f7;
     width: 300px;
     height: 350px;
@@ -74,6 +72,10 @@
 
         &hide{
             display: none;
+        }
+
+        &:hover{
+            cursor: pointer;
         }
     }
 
