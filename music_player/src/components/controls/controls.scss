@@ -1,0 +1,28 @@
+.controlsContainer{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 40%;
+
+    .playButton{
+        &.pause{
+            fill: blue;
+        }
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+
+    .leftArrow {
+        &:hover {
+            cursor: pointer,
+        }
+    }
+
+    .rightArrow {
+        &:hover {
+            cursor: pointer,
+        }
+    }
+}

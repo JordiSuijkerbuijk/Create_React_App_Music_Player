@@ -3,7 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 
 //imports
-import MusicPlayer from "./components/musicPlayer/musicPlayer";
+import MusicPlayer from "./components/musicPlayer/MusicPlayer";
 
 function App() {
   return (
