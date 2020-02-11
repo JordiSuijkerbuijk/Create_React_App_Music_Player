@@ -1,49 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import dlv from 'dlv';
 
-import dlv from "dlv";
+import './slider.scss';
 
-import "./slider.scss";
+function calculateAudioDuration(duration) {
+  const minutes = parseInt(duration / 60, 10);
+  const seconds = parseInt(duration % 60);
+  duration = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  duration.toString();
 
-function Slider(props) {
-  const audio = dlv(props, "audio", "");
-  const audioFile = new Audio(props.audio);
-  const [audioLength, setAudioLength] = useState("null");
+  return duration;
+}
 
-  const [audioTimer, setAudioTimer] = useState(0);
-
-  function audioDuration(duration) {
-    const minutes = parseInt(duration / 60, 10);
-    const seconds = parseInt(duration % 60);
-    duration = minutes + ":" + seconds;
-    duration.toString();
-
-    return duration;
-  }
+function Slider({ audio, isPlaying }) {
+  const [currentTime, setCurrentTime] = useState(0);
+  const audioDuration = calculateAudioDuration(audio.duration);
+  const animationFrame = useRef(null);
 
   useEffect(() => {
-    audioFile.addEventListener("loadeddata", () => {
-      const duration = audioDuration(audioFile.duration);
-      setAudioLength(duration);
-      // The duration variable now holds the duration (in seconds) of the audio clip
-    });
-  }, []);
+    if (isPlaying) draw();
+
+    return function cleanup() {
+      window.cancelAnimationFrame(animationFrame.current);
+    };
+  }, [isPlaying]);
+
+  function draw() {
+    setCurrentTime(calculateAudioDuration(audio.currentTime));
+    animationFrame.current = window.requestAnimationFrame(draw);
+  }
 
   return (
     <div className="sliderContainer">
       <div className="musicPlayerSlider">
         <div className="musicPlayerSliderTime">
-          <p>{audioLength}</p>
+          <p>{audioDuration}</p>
         </div>
         <div className="musicPlayerSliderCurrentTime">
-          <p>
-            {/* {setInterval(audioTimeCounter, 1000)}:{audioTimeCounterSeconds} */}
-          </p>
+          <p>{currentTime}</p>
           <span id="duration"></span>
         </div>
-        <div
-          className="musicPlayerSliderTimeIndicator"
-          id="musicPlayerSliderTimeIndicator"
-        />
+        <div className="musicPlayerSliderTimeIndicator" id="musicPlayerSliderTimeIndicator" />
       </div>
     </div>
   );

@@ -9,6 +9,11 @@
     flex-direction: column;
 }
 
+@keyframes slideAnimation {
+    0%   { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+}
+
 .musicPlayerBlock {
     position: absolute;
     flex-direction: column;
@@ -41,22 +46,24 @@
         justify-content: center;
 
         & .musicPlayerSongTitle {
-            overflow: auto;
+            overflow: hidden;
             white-space: nowrap;
-            transition: 3s;
             position: absolute;
             top: 0;
             display: flex;
             align-self: center;
 
-            #marquee {
+            // span {
+            //     transition: transform .11s ease;
 
-            }
+            //     &:hover {
+            //         animation: slideAnimation;
+            //     }
+            // }
 
-            &:hover {
-                transition: 3s;
-                right: 100%;
-            }
+            // &:hover {
+            //     // right: 100%;
+            // }
         }
     }
     

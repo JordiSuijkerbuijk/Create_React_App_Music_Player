@@ -1,23 +1,59 @@
-import React, { useState } from "react";
-import soundFile from "../../public/songs/Kendrick_Lamar-Money_Trees.mp3";
+import React, { useState, useRef, useEffect } from 'react';
+import anime from 'animejs';
 
-import Controls from "../controls/Controls";
-import Slider from "../slider/Slider";
+import soundFile from '../../public/songs/Kendrick_Lamar-Money_Trees.mp3';
 
-import "./musicplayer.scss";
+import Controls from '../controls/Controls';
+import Slider from '../slider/Slider';
 
-var audioFile = new Audio(soundFile);
+import './musicplayer.scss';
+
+// const audioFile = new Audio(soundFile);
 
 //data that has to come from the soundFile / medialibrary which is coming soon.
-const songTitle = "Money Trees";
-const songArtist = "Kendrick Lamar";
+const songTitle = 'Money Trees';
+const songArtist = 'Kendrick Lamar';
 
 function MusicPlayer() {
-  const selectedSong = "Kendrick_Lamar-Money_Trees.mp3";
-  const audioSource = "../../public/songs/" + selectedSong;
-
-  //check if audio is playing
+  const songTitleRef = useRef(null);
+  const [canPlay, setCanPlay] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const audioFile = useRef(new Audio(soundFile));
+
+  function audioFileAvailable() {
+    setCanPlay(true);
+  }
+
+  function togglePlaying() {
+    const functionName = isPlaying ? 'pause' : 'play';
+    audioFile.current[functionName]();
+    setIsPlaying(isPlaying === false);
+  }
+
+  useEffect(() => {
+    audioFile.current.addEventListener('canplaythrough', audioFileAvailable);
+    return function cleanup() {
+      audioFile.current.removeEventListener('canplaythrough', audioFileAvailable);
+    };
+  }, []);
+
+  function titleAnimationOnHover() {
+    const duration = 5000;
+    anime({
+      targets: songTitleRef.current,
+      translateX: '-100%',
+      duration,
+      easing: 'linear',
+      complete: () =>
+        anime({
+          targets: songTitleRef.current,
+          translateX: ['100%', '0%'],
+          duration,
+          easing: 'linear',
+        }),
+    });
+  }
 
   return (
     <div className="musicPlayerBlock">
@@ -28,23 +64,22 @@ function MusicPlayer() {
       />
 
       {/* Range Slider */}
-      <Slider audio={soundFile} isPlaying={isPlaying} />
+      {canPlay && <Slider audio={audioFile.current} isPlaying={isPlaying} />}
 
       {/* Play button */}
       <div className="container">
         {/* Song Title */}
         <div className="musicPlayerTitleContainer">
-          <div
-            className="musicPlayerSongTitle"
-            // onMouseOver={titleAnimationOnHover}
-          >
-            <marquee id="marquee">
+          <div className="musicPlayerSongTitle" onMouseOver={titleAnimationOnHover}>
+            <span ref={songTitleRef}>
               {songTitle} - {songArtist}
-            </marquee>
+            </span>
           </div>
         </div>
 
-        <Controls selectedSong={soundFile} isPlaying={setIsPlaying} />
+        {canPlay && (
+          <Controls audio={audioFile.current} togglePlaying={togglePlaying} isPlaying={isPlaying} />
+        )}
       </div>
     </div>
   );
