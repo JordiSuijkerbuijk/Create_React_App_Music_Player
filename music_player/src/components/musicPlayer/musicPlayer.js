@@ -63,9 +63,6 @@ function MusicPlayer() {
         src="https://images.pexels.com/photos/1020315/pexels-photo-1020315.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
       />
 
-      {/* Range Slider */}
-      {canPlay && <Slider audio={audioFile.current} isPlaying={isPlaying} />}
-
       {/* Play button */}
       <div className="container">
         {/* Song Title */}
@@ -81,6 +78,10 @@ function MusicPlayer() {
           <Controls audio={audioFile.current} togglePlaying={togglePlaying} isPlaying={isPlaying} />
         )}
       </div>
+
+      {/* Range Slider */}
+      {canPlay && <Slider audio={audioFile.current} isPlaying={isPlaying} />}
+      
     </div>
   );
 }

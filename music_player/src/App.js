@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 
 //imports
-import MusicPlayer from "./components/musicPlayer/MusicPlayer";
+import MusicPlayer from "./components/musicPlayer/musicPlayer";
 
 function App() {
   return (
