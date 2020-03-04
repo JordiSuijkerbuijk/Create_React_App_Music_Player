@@ -33,16 +33,18 @@ function Slider({ audio, isPlaying }) {
   return (
     <div className="sliderContainer">
       <div className="musicPlayerSlider">
+        </div>
         <div className="musicPlayerSliderTime">
-          <p>{audioDuration}</p>
+          <p class="currentTime">{currentTime}</p>
+          <p class="totalTime">{audioDuration}</p>
         </div>
-        <div className="musicPlayerSliderCurrentTime">
-          <p>{currentTime}</p>
+        {/* <div className="musicPlayerSliderCurrentTime">
+          
           <span id="duration"></span>
-        </div>
+        </div> */}
         <div className="musicPlayerSliderTimeIndicator" id="musicPlayerSliderTimeIndicator" />
       </div>
-    </div>
+    // </div>
   );
 }
 
