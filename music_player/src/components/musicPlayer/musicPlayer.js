@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+
 import anime from 'animejs';
 
 import soundFile from '../../public/songs/Kendrick_Lamar-Money_Trees.mp3';
@@ -18,6 +19,7 @@ function MusicPlayer() {
   const songTitleRef = useRef(null);
   const [canPlay, setCanPlay] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [startPlayingAt, setStartPlayingAt] = useState(0);
 
   const audioFile = useRef(new Audio(soundFile));
 
@@ -28,7 +30,34 @@ function MusicPlayer() {
   function togglePlaying() {
     const functionName = isPlaying ? 'pause' : 'play';
     audioFile.current[functionName]();
+    audioFile.current.currentTime = startPlayingAt;
+    audioFile.current.volume = 0.1;
+
+    volumeFade(audioFile.current);
     setIsPlaying(isPlaying === false);
+  }
+
+  function volumeFade(audio) {
+    const fade = setInterval(function() {
+      if (audio.volume < 1) {
+        audio.volume += 0.1;
+        console.log('audio.volume', audio.volume);
+      } else {
+        clearInterval(fade);
+      }
+    }, 200);
+    // anime({
+    //   translateX: 270,
+    //   delay: 1000,
+    //   direction: 'alternate',
+    //   loop: 3,
+    //   easing: 'easeInOutCirc',
+    //   update: function(anim) {
+    //     updates++;
+    //     progressLogEl.value = 'progress : '+Math.round(anim.progress)+'%';
+    //     updateLogEl.value = 'updates : '+updates;
+    //   }
+    // });
   }
 
   useEffect(() => {
@@ -37,23 +66,6 @@ function MusicPlayer() {
       audioFile.current.removeEventListener('canplaythrough', audioFileAvailable);
     };
   }, []);
-
-  function titleAnimationOnHover() {
-    const duration = 5000;
-    anime({
-      targets: songTitleRef.current,
-      translateX: '-100%',
-      duration,
-      easing: 'linear',
-      complete: () =>
-        anime({
-          targets: songTitleRef.current,
-          translateX: ['100%', '0%'],
-          duration,
-          easing: 'linear',
-        }),
-    });
-  }
 
   return (
     <div className="musicPlayerBlock">
@@ -64,10 +76,10 @@ function MusicPlayer() {
       />
 
       {/* Play button */}
-      <div className="container">
+      <div className="controlsContainer">
         {/* Song Title */}
         <div className="musicPlayerTitleContainer">
-          <div className="musicPlayerSongTitle" onMouseOver={titleAnimationOnHover}>
+          <div className="musicPlayerSongTitle">
             <span ref={songTitleRef}>
               {songTitle} - {songArtist}
             </span>
@@ -80,8 +92,13 @@ function MusicPlayer() {
       </div>
 
       {/* Range Slider */}
-      {canPlay && <Slider audio={audioFile.current} isPlaying={isPlaying} />}
-      
+      {canPlay && (
+        <Slider
+          audio={audioFile.current}
+          isPlaying={isPlaying}
+          setStartPlayingAt={setStartPlayingAt}
+        />
+      )}
     </div>
   );
 }
