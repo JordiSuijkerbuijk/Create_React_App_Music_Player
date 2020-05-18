@@ -5,103 +5,73 @@ import style from './stackedCards.scss';
 function StackedCards() {
   let position = 0;
   const [eventListener, setEventListener] = useState(false);
+
   function myFunction(e, wrapper, body, sectionWrapper, scale) {
+    const clientHeight = wrapper.children[0].clientHeight;
+    let deltaY = 0;
 
-    if ( e.pageY > wrapper.offsetTop + 100) {
-        if(position > 400 * (wrapper.children.length - 1)) {
-            body.style.overflow = 'auto';
-        }
-        else if (position === 0) {
-            body.style.overflow = 'auto';
-        }
-        else {
-            body.style.overflow = 'hidden';
-        }
-        let deltaY = 0;
+    if (
+      e.pageY > wrapper.offsetParent.offsetTop + 100 &&
+      e.pageY < wrapper.offsetParent.offsetTop + clientHeight
+    ) {
+      if (position > clientHeight * (wrapper.children.length - 1)) {
+        body.style.overflow = 'auto';
+      } else if (position <= 0) {
+        body.style.overflow = 'auto';
+      } else {
+        body.style.overflow = 'hidden';
+      }
 
-        console.log('pageY', e.pageY - wrapper.offsetTop);
+      // determine scrollspeed, so that scrolling won't be to fast;
+      if (e.deltaY > 0) {
+        deltaY = e.deltaY > 3 ? 3 : e.deltaY;
+        position += deltaY * 2;
+      } else {
+        deltaY = e.deltaY < -3 ? -3 : e.deltaY;
+        position += position <= 0 ? 0 : deltaY * 2;
+      }
 
-        //scroll power, the higher the deltaY the faster the scroll.
-        console.log('position', position);
-        if (e.deltaY > 0) {
-            deltaY = e.deltaY > 5 ? 5 : e.deltaY;
-            position += deltaY * 3;
-        } else {
-            deltaY = e.deltaY < -5 ? -5 : e.deltaY;
-            position += position <= 0 ? 0 : deltaY * 3;
-        }
-
-        //   When pageY is higher than the offsetTop of the wrapper + 100 pixels.
-        // position = e.deltaY < 0 ? position - deltaY * 1 : position + deltaY * 1;
-        // console.log(position);
-
-        if (wrapper.children.length >= 0) {
-            for (var i = 0; i < wrapper.children.length; i++) {
-                if (i > 0) {
-                    if (position <= i * 400) {
-                        wrapper.children[i].style.transform = `translateY(-${position}px) scale(${scale[i] > 1 ? 1 : scale[i]})`;
-                        sectionWrapper.style.height = `${400 * wrapper.children.length - position + 100}px`;
-                    } 
-                }
-            }
-        }
-
-          
-
-
-          //if the current item i is equal to 0, translateY is newPosition.
-
-          if (i === 0) {
-
-            if (position > (i + 1) * 395) {
-
-              if (position < 395 * (wrapper.children.length - 1) + wrapper.children.length * 20 ) {
-                scale[i] = e.deltaY < 0 ? scale[i] + 0.0002 : scale[i] - 0.0002;
-                wrapper.children[i].style.transform = `scale(${scale[i] > 1 ? 1 : scale[i]})`;
-              }
-            } else if ( e.pageY < wrapper.offsetTop + 100 + wrapper.children.length * 20 || position === 395 * (wrapper.children.length - 1) + wrapper.children.length * 20 ) {
-              wrapper.children[i].style.transform = `scale(1)`;
-              scale[i] = 1;
+      if (wrapper.children.length >= 0) {
+        for (var i = 0; i < wrapper.children.length; i++) {
+          if (i > 0) {
+            if (position <= i * clientHeight) {
+              wrapper.children[i].style.transform = `translateY(-${position}px) scale(${
+                scale[i] > 1 ? 1 : scale[i]
+              })`;
+              // sectionWrapper.style.height = `${400 * wrapper.children.length - position + 100}px`;
+            } else {
+              wrapper.children[i].style.transform = `translateY(-${clientHeight * i - i * 5}px)`;
             }
           }
-        // position += e.deltaY;
-
-    //   }
-
-    // } else {
-
-    //   //PageY is higher than offsetTop the cards should start stacked
-
-    //   for (var i2 = 0; i < wrapper.children.length; i2++) {
-
-    //     wrapper.children[i].style.transform = `translateY(-${(400 - 5) *
-
-    //       wrapper.children.length}px)`;
-
-    //     sectionWrapper.style.height = `${395 + wrapper.children.length * 20}px`;
-
-    //   }
-
-    // }
-
         }
-        else if (e.pageY < wrapper.offsetTop) {
-                for (var i2 = 0; i < wrapper.children.length; i2++) {
+      }
+
+      if (i === 0) {
+        if (position > (i + 1) * clientHeight - 5) {
+          if (
+            position <
+            clientHeight - 5 * (wrapper.children.length - 1) + wrapper.children.length * 20
+          ) {
+            scale[i] = e.deltaY < 0 ? scale[i] + 0.0002 : scale[i] - 0.0002;
+            wrapper.children[i].style.transform = `scale(${scale[i] > 1 ? 1 : scale[i]})`;
+          }
+        } else if (
+          e.pageY < wrapper.offsetParent.offsetTop + 100 + wrapper.children.length * 20 ||
+          position ===
+            (wrapper.offsetParent.offsetTop - 5) * (wrapper.children.length - 1) +
+              wrapper.children.length * 20
+        ) {
+          wrapper.children[i].style.transform = `scale(1)`;
+          scale[i] = 1;
+        }
+      }
+    } else if (e.pageY < wrapper.offsetParent.offsetTop + 100) {
+      for (var i2 = 0; i < wrapper.children.length; i2++) {
         wrapper.children[i].style.transform = `translateY(0px)`;
-        sectionWrapper.style.height = `${395 + wrapper.children.length * 20}px`;
-                }
-        }
-  else {
-    body.style.overflow = 'auto';
-    // // position = position < 400 * (wrapper.children.length - 1) - 1;
-
-    // for (var i2 = 0; i < wrapper.children.length; i2++) {
-    //     wrapper.children[i].style.transform = `translateY(-${(400 - 5) * wrapper.children.length}px)`;
-    //     sectionWrapper.style.height = `${395 + wrapper.children.length * 20}px`;
-    //   }
+        // sectionWrapper.style.height = `${clientHeight - 5 + wrapper.children.length * 20}px`;
+      }
+    }
   }
-}
-
 
   useEffect(() => {
     const wrapper = document.querySelector('#wrapper');
@@ -114,12 +84,24 @@ function StackedCards() {
     }
 
     if (eventListener !== true) {
-      body.addEventListener('wheel', e => myFunction(e, wrapper, body, sectionWrapper, scale));
+      body.addEventListener('wheel', (e) => myFunction(e, wrapper, body, sectionWrapper, scale));
+
+      if (window.pageYOffset > wrapper.children[0].clientHeight * (wrapper.children.length - 1)) {
+        position = wrapper.children[0].clientHeight * (wrapper.children.length - 1);
+
+        for (var i = 0; i < wrapper.children.length; i++) {
+          wrapper.children[i].style.transform = `translateY(-${
+            wrapper.children[0].clientHeight * i
+          }px)`;
+          sectionWrapper.style.height = `${
+            wrapper.children[0].clientHeight - 5 + wrapper.children.length * 20
+          }px`;
+        }
+      }
+
       setEventListener(true);
     }
-
   }, []);
-
 
   return (
     <section class="stackedCards" id="sectionWrapper">
@@ -134,7 +116,10 @@ function StackedCards() {
                 Supports complex multi tier customer order to prevent over collection
               </p>
             </div>
-            <img class="image" src="https://interactive-examples.mdn.mozilla.net/media/examples/grapefruit-slice-332-332.jpg" />
+            <img
+              class="image"
+              src="https://interactive-examples.mdn.mozilla.net/media/examples/grapefruit-slice-332-332.jpg"
+            />
           </div>
           <div class="stackedCard">
             <div class="text">
@@ -145,7 +130,10 @@ function StackedCards() {
                 Supports complex multi tier customer order to prevent over collection
               </p>
             </div>
-            <img class="image" src="https://interactive-examples.mdn.mozilla.net/media/examples/grapefruit-slice-332-332.jpg" />
+            <img
+              class="image"
+              src="https://interactive-examples.mdn.mozilla.net/media/examples/grapefruit-slice-332-332.jpg"
+            />
           </div>
           <div class="stackedCard">
             <div class="text">
@@ -156,7 +144,10 @@ function StackedCards() {
                 Supports complex multi tier customer order to prevent over collection
               </p>
             </div>
-            <img class="image" src="https://interactive-examples.mdn.mozilla.net/media/examples/grapefruit-slice-332-332.jpg" />
+            <img
+              class="image"
+              src="https://interactive-examples.mdn.mozilla.net/media/examples/grapefruit-slice-332-332.jpg"
+            />
           </div>
           <div class="stackedCard">
             <div class="text">
@@ -167,7 +158,10 @@ function StackedCards() {
                 Supports complex multi tier customer order to prevent over collection
               </p>
             </div>
-            <img class="image" src="https://interactive-examples.mdn.mozilla.net/media/examples/grapefruit-slice-332-332.jpg" />
+            <img
+              class="image"
+              src="https://interactive-examples.mdn.mozilla.net/media/examples/grapefruit-slice-332-332.jpg"
+            />
           </div>
         </div>
       </div>
