@@ -10,10 +10,20 @@ function StackedCards() {
     const clientHeight = wrapper.children[0].clientHeight;
     let deltaY = 0;
 
+    //use window.pageYoffset
+
     if (
       e.pageY > wrapper.offsetParent.offsetTop + 100 &&
       e.pageY < wrapper.offsetParent.offsetTop + clientHeight
     ) {
+      console.log(
+        'wrapper.offsetParent.offsetTop + clientHeight',
+        wrapper.offsetParent.offsetTop + clientHeight
+      );
+      console.log('window.pageOffsetY', window.pageYOffset);
+      console.log('clientHeight', clientHeight);
+      console.log('position', position);
+
       if (position > clientHeight * (wrapper.children.length - 1)) {
         body.style.overflow = 'auto';
       } else if (position <= 0) {
@@ -25,10 +35,10 @@ function StackedCards() {
       // determine scrollspeed, so that scrolling won't be to fast;
       if (e.deltaY > 0) {
         deltaY = e.deltaY > 3 ? 3 : e.deltaY;
-        position += deltaY * 2;
+        position += deltaY * 2.5;
       } else {
         deltaY = e.deltaY < -3 ? -3 : e.deltaY;
-        position += position <= 0 ? 0 : deltaY * 2;
+        position += position <= 0 ? 0 : deltaY * 2.5;
       }
 
       if (wrapper.children.length >= 0) {
@@ -43,29 +53,46 @@ function StackedCards() {
               wrapper.children[i].style.transform = `translateY(-${clientHeight * i - i * 5}px)`;
             }
           }
+          if (position > (i + 1) * clientHeight) {
+            if (deltaY < 0) {
+              if (scale[i] <= 1) {
+                scale[i] += 0.0002;
+              }
+            } else {
+              if (scale[i] > 1 - (wrapper.children.length - i) * 0.01) {
+                scale[i] -= 0.0002;
+              } else {
+                scale[i] = 1 - (wrapper.children.length - i) * 0.01;
+              }
+            }
+
+            wrapper.children[i].style.transform = `translateY(-${
+              i * clientHeight - i * 5
+            }px) scale(${scale[i] > 1 ? 1 : scale[i]})`;
+          }
         }
       }
 
-      if (i === 0) {
-        if (position > (i + 1) * clientHeight - 5) {
-          if (
-            position <
-            clientHeight - 5 * (wrapper.children.length - 1) + wrapper.children.length * 20
-          ) {
-            scale[i] = e.deltaY < 0 ? scale[i] + 0.0002 : scale[i] - 0.0002;
-            wrapper.children[i].style.transform = `scale(${scale[i] > 1 ? 1 : scale[i]})`;
-          }
-        } else if (
-          e.pageY < wrapper.offsetParent.offsetTop + 100 + wrapper.children.length * 20 ||
-          position ===
-            (wrapper.offsetParent.offsetTop - 5) * (wrapper.children.length - 1) +
-              wrapper.children.length * 20
-        ) {
-          wrapper.children[i].style.transform = `scale(1)`;
-          scale[i] = 1;
-        }
-      }
-    } else if (e.pageY < wrapper.offsetParent.offsetTop + 100) {
+      // if (i === 0) {
+      //   if (position > (i + 1) * clientHeight - 5) {
+      //     if (
+      //       position <
+      //       clientHeight - 5 * (wrapper.children.length - 1) + wrapper.children.length * 20
+      //     ) {
+      //       scale[i] = e.deltaY < 0 ? scale[i] + 0.0002 : scale[i] - 0.0002;
+      //       wrapper.children[i].style.transform = `scale(${scale[i] > 1 ? 1 : scale[i]})`;
+      //     }
+      //   } else if (
+      //     e.pageY < wrapper.offsetParent.offsetTop + 100 + wrapper.children.length * 20 ||
+      //     position ===
+      //       (wrapper.offsetParent.offsetTop - 5) * (wrapper.children.length - 1) +
+      //         wrapper.children.length * 20
+      //   ) {
+      //     wrapper.children[i].style.transform = `scale(1)`;
+      //     scale[i] = 1;
+      //   }
+      // }
+    } else if (window.pageY < wrapper.offsetParent.offsetTop + 100) {
       for (var i2 = 0; i < wrapper.children.length; i2++) {
         wrapper.children[i].style.transform = `translateY(0px)`;
         // sectionWrapper.style.height = `${clientHeight - 5 + wrapper.children.length * 20}px`;
