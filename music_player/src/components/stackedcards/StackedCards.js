@@ -9,11 +9,7 @@ function StackedCards() {
   function myFunction(e, wrapper, body, sectionWrapper, scale) {
     const clientHeight = wrapper.children[0].clientHeight;
     let deltaY = 0;
-
-    if (
-      window.pageYOffset > wrapper.offsetParent.offsetTop - 250 &&
-      window.pageYOffset < clientHeight * (wrapper.children.length - 1)
-    ) {
+      
       // determine scrollspeed, so that scrolling won't be to fast;
       if (e.deltaY > 0) {
         deltaY = e.deltaY > 3 ? 3 : e.deltaY;
@@ -21,14 +17,6 @@ function StackedCards() {
       } else {
         deltaY = e.deltaY < -3 ? -3 : e.deltaY;
         position += position <= 0 ? 0 : deltaY * 2.5;
-      }
-
-      if (position >= clientHeight * (wrapper.children.length - 1) - wrapper.children.length * 5) {
-        body.style.overflow = 'auto';
-      } else if (position <= 0) {
-        body.style.overflow = 'auto';
-      } else {
-        body.style.overflow = 'hidden';
       }
 
       if (wrapper.children.length >= 0) {
@@ -62,7 +50,8 @@ function StackedCards() {
           }
         }
       }
-    } else if (window.pageYOffset < wrapper.offsetParent.offsetTop - 250) {
+
+    if (window.pageYOffset < wrapper.offsetParent.offsetTop - 250) {
       for (var i2 = 0; i < wrapper.children.length; i2++) {
         wrapper.children[i].style.transform = `translateY(0px)`;
         // sectionWrapper.style.height = `${clientHeight - 5 + wrapper.children.length * 20}px`;
@@ -70,28 +59,63 @@ function StackedCards() {
     }
   }
 
+  function scrolledFunction(wrapper) {
+    const clientHeight = wrapper.children[0].clientHeight;
+    if (position >= 0 && window.pageYOffset >= (wrapper.offsetParent.offsetTop - 250) && window.pageYOffset < (clientHeight * (wrapper.children.length - 1))){
+      if (wrapper.children[wrapper.children.length - 1].style.transform === "translateY(-1365px)") {
+        return false;
+      }
+      return true;
+    }
+    else if (position < 0) {
+      return false;
+    }
+  }
+
+  function testFunction (e, wrapper, body, sectionWrapper, scale ){
+    const clientHeight = wrapper.children[0].clientHeight;
+
+    if (scrolledFunction(wrapper) === true) {
+      if(window.pageYOffset >= (wrapper.offsetParent.offsetTop - 250) && window.pageYOffset < (clientHeight * (wrapper.children.length - 1))) {
+        if(window.scrollY > wrapper.offsetParent.offsetTop - 250) {
+          window.scrollTo(0, wrapper.offsetParent.offsetTop - 250);
+        }
+
+        body.style.overflow = 'hidden';
+        myFunction(e, wrapper, body, sectionWrapper, scale)
+      }
+    }
+    else {
+      body.style.overflow = 'auto';
+    }
+  }
+
   useEffect(() => {
     const wrapper = document.querySelector('#wrapper');
     const sectionWrapper = document.querySelector('#sectionWrapper');
     const body = document.querySelector('body');
+    const clientHeight = wrapper.children[0].clientHeight;
     let scale = [];
 
     for (var i = 0; i < wrapper.children.length; i++) {
       scale = [...scale, 1];
     }
 
-    if (eventListener !== true) {
-      body.addEventListener('wheel', (e) => myFunction(e, wrapper, body, sectionWrapper, scale));
+    console.log(wrapper.offsetParent.offsetTop - 250);
 
-      if (window.pageYOffset > wrapper.children[0].clientHeight * (wrapper.children.length - 1)) {
-        position = wrapper.children[0].clientHeight * (wrapper.children.length - 1);
+    if (eventListener !== true) {
+      // 
+      body.addEventListener('wheel', (e) => testFunction(e, wrapper, body, sectionWrapper, scale));
+
+      if (window.pageYOffset > clientHeight * (wrapper.children.length - 1)) {
+        position = clientHeight * (wrapper.children.length - 1);
 
         for (var i = 0; i < wrapper.children.length; i++) {
           wrapper.children[i].style.transform = `translateY(-${
-            wrapper.children[0].clientHeight * i
+            clientHeight * i
           }px)`;
           sectionWrapper.style.height = `${
-            wrapper.children[0].clientHeight - 5 + wrapper.children.length * 20
+            clientHeight - 5 + wrapper.children.length * 20
           }px`;
         }
       }
