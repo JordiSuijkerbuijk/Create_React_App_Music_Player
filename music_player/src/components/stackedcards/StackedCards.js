@@ -11,22 +11,9 @@ function StackedCards() {
     let deltaY = 0;
 
     if (
-      window.pageYOffset > wrapper.offsetParent.offsetTop - 100 &&
-      window.pageYOffset < wrapper.offsetParent.offsetTop
+      window.pageYOffset > wrapper.offsetParent.offsetTop - 250 &&
+      window.pageYOffset < clientHeight * (wrapper.children.length - 1)
     ) {
-      if (position > clientHeight * (wrapper.children.length - 1)) {
-        body.style.overflow = 'auto';
-      } else if (position <= 0) {
-        body.style.overflow = 'auto';
-      } else if (
-        window.pageYOffset > wrapper.offsetParent.offsetTop - 100 &&
-        window.pageYOffset < wrapper.offsetParent.offsetTop
-      ) {
-        body.style.overflow = 'hidden';
-      } else {
-        body.style.overflow = 'hidden';
-      }
-
       // determine scrollspeed, so that scrolling won't be to fast;
       if (e.deltaY > 0) {
         deltaY = e.deltaY > 3 ? 3 : e.deltaY;
@@ -34,6 +21,14 @@ function StackedCards() {
       } else {
         deltaY = e.deltaY < -3 ? -3 : e.deltaY;
         position += position <= 0 ? 0 : deltaY * 2.5;
+      }
+
+      if (position >= clientHeight * (wrapper.children.length - 1) - wrapper.children.length * 5) {
+        body.style.overflow = 'auto';
+      } else if (position <= 0) {
+        body.style.overflow = 'auto';
+      } else {
+        body.style.overflow = 'hidden';
       }
 
       if (wrapper.children.length >= 0) {
@@ -67,27 +62,7 @@ function StackedCards() {
           }
         }
       }
-
-      // if (i === 0) {
-      //   if (position > (i + 1) * clientHeight - 5) {
-      //     if (
-      //       position <
-      //       clientHeight - 5 * (wrapper.children.length - 1) + wrapper.children.length * 20
-      //     ) {
-      //       scale[i] = e.deltaY < 0 ? scale[i] + 0.0002 : scale[i] - 0.0002;
-      //       wrapper.children[i].style.transform = `scale(${scale[i] > 1 ? 1 : scale[i]})`;
-      //     }
-      //   } else if (
-      //     e.pageY < wrapper.offsetParent.offsetTop + 100 + wrapper.children.length * 20 ||
-      //     position ===
-      //       (wrapper.offsetParent.offsetTop - 5) * (wrapper.children.length - 1) +
-      //         wrapper.children.length * 20
-      //   ) {
-      //     wrapper.children[i].style.transform = `scale(1)`;
-      //     scale[i] = 1;
-      //   }
-      // }
-    } else if (window.pageYOffset < wrapper.offsetParent.offsetTop - 100) {
+    } else if (window.pageYOffset < wrapper.offsetParent.offsetTop - 250) {
       for (var i2 = 0; i < wrapper.children.length; i2++) {
         wrapper.children[i].style.transform = `translateY(0px)`;
         // sectionWrapper.style.height = `${clientHeight - 5 + wrapper.children.length * 20}px`;
