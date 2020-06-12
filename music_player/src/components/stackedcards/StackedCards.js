@@ -10,24 +10,19 @@ function StackedCards() {
     const clientHeight = wrapper.children[0].clientHeight;
     let deltaY = 0;
 
-    //use window.pageYoffset
-
     if (
-      e.pageY > wrapper.offsetParent.offsetTop + 100 &&
-      e.pageY < wrapper.offsetParent.offsetTop + clientHeight
+      window.pageYOffset > wrapper.offsetParent.offsetTop - 100 &&
+      window.pageYOffset < wrapper.offsetParent.offsetTop
     ) {
-      console.log(
-        'wrapper.offsetParent.offsetTop + clientHeight',
-        wrapper.offsetParent.offsetTop + clientHeight
-      );
-      console.log('window.pageOffsetY', window.pageYOffset);
-      console.log('clientHeight', clientHeight);
-      console.log('position', position);
-
       if (position > clientHeight * (wrapper.children.length - 1)) {
         body.style.overflow = 'auto';
       } else if (position <= 0) {
         body.style.overflow = 'auto';
+      } else if (
+        window.pageYOffset > wrapper.offsetParent.offsetTop - 100 &&
+        window.pageYOffset < wrapper.offsetParent.offsetTop
+      ) {
+        body.style.overflow = 'hidden';
       } else {
         body.style.overflow = 'hidden';
       }
@@ -92,7 +87,7 @@ function StackedCards() {
       //     scale[i] = 1;
       //   }
       // }
-    } else if (window.pageY < wrapper.offsetParent.offsetTop + 100) {
+    } else if (window.pageYOffset < wrapper.offsetParent.offsetTop - 100) {
       for (var i2 = 0; i < wrapper.children.length; i2++) {
         wrapper.children[i].style.transform = `translateY(0px)`;
         // sectionWrapper.style.height = `${clientHeight - 5 + wrapper.children.length * 20}px`;
