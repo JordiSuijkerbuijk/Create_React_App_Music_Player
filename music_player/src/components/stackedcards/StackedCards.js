@@ -23,9 +23,11 @@ function StackedCards() {
         window.pageYOffset < wrapper.offsetParent.offsetTop
       ) {
         body.style.overflow = 'hidden';
-      } else {
-        body.style.overflow = 'hidden';
       }
+
+      // if (window.scrollY > wrapper.offsetParent.offsetTop - 100) {
+      //   window.scrollTo(0, wrapper.offsetParent.offsetTop - 100);
+      // }
 
       // determine scrollspeed, so that scrolling won't be to fast;
       if (e.deltaY > 0) {
@@ -142,11 +144,9 @@ function StackedCards() {
       scale = [...scale, 1];
     }
 
-    console.log(wrapper.offsetParent.offsetTop - 250);
-
     if (eventListener !== true) {
       //
-      body.addEventListener('wheel', (e) => testFunction(e, wrapper, body, sectionWrapper, scale));
+      body.addEventListener('wheel', (e) => myFunction(e, wrapper, body, sectionWrapper, scale));
 
       if (window.pageYOffset > clientHeight * (wrapper.children.length - 1)) {
         position = clientHeight * (wrapper.children.length - 1);
