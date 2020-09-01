@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import anime from 'animejs';
+// import anime from 'animejs';
 
 import soundFile from '../../public/songs/Kendrick_Lamar-Money_Trees.mp3';
 
@@ -39,9 +39,8 @@ function MusicPlayer() {
 
   function volumeFade(audio) {
     const fade = setInterval(function() {
-      if (audio.volume < 1) {
+      if (audio.volume <= 0.9) {
         audio.volume += 0.1;
-        console.log('audio.volume', audio.volume);
       } else {
         clearInterval(fade);
       }
@@ -66,6 +65,10 @@ function MusicPlayer() {
       audioFile.current.removeEventListener('canplaythrough', audioFileAvailable);
     };
   }, []);
+
+  useEffect(() => {
+    audioFile.current.currentTime = startPlayingAt;
+  }, [startPlayingAt])
 
   return (
     <div className="musicPlayerBlock">
