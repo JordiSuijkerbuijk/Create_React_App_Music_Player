@@ -38,7 +38,7 @@ function MusicPlayer() {
   }
 
   function volumeFade(audio) {
-    const fade = setInterval(function() {
+    const fade = setInterval(function () {
       if (audio.volume <= 0.9) {
         audio.volume += 0.1;
       } else {
@@ -68,40 +68,46 @@ function MusicPlayer() {
 
   useEffect(() => {
     audioFile.current.currentTime = startPlayingAt;
-  }, [startPlayingAt])
+  }, [startPlayingAt]);
 
   return (
-    <div className="musicPlayerBlock">
-      {/* Image */}
-      <img
-        className="musicPlayerImage"
-        src="https://images.pexels.com/photos/1020315/pexels-photo-1020315.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-      />
+    <div className="musicPlayerWrapper">
+      <div className="musicPlayerBlock">
+        {/* Image */}
+        <img
+          className="musicPlayerImage"
+          src="https://images.pexels.com/photos/1020315/pexels-photo-1020315.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+        />
 
-      {/* Play button */}
-      <div className="controlsContainer">
-        {/* Song Title */}
-        <div className="musicPlayerTitleContainer">
-          <div className="musicPlayerSongTitle">
-            <span ref={songTitleRef}>
-              {songTitle} - {songArtist}
-            </span>
+        {/* Play button */}
+        <div className="controlsContainer">
+          {/* Song Title */}
+          <div className="musicPlayerTitleContainer">
+            <div className="musicPlayerSongTitle">
+              <span ref={songTitleRef}>
+                {songTitle} - {songArtist}
+              </span>
+            </div>
           </div>
+
+          {canPlay && (
+            <Controls
+              audio={audioFile.current}
+              togglePlaying={togglePlaying}
+              isPlaying={isPlaying}
+            />
+          )}
         </div>
 
+        {/* Range Slider */}
         {canPlay && (
-          <Controls audio={audioFile.current} togglePlaying={togglePlaying} isPlaying={isPlaying} />
+          <Slider
+            audio={audioFile.current}
+            isPlaying={isPlaying}
+            setStartPlayingAt={setStartPlayingAt}
+          />
         )}
       </div>
-
-      {/* Range Slider */}
-      {canPlay && (
-        <Slider
-          audio={audioFile.current}
-          isPlaying={isPlaying}
-          setStartPlayingAt={setStartPlayingAt}
-        />
-      )}
     </div>
   );
 }
