@@ -10,6 +10,49 @@
 		width: 100%;
 		background-color: #eef3f7;
 		border-radius: 30px;
+		overflow: scroll;
+	}
 
+	.searchWrapper {
+		display: flex;
+		justify-content: center;
+
+		.search {
+			margin-top: 15px;
+			width: 75%;
+			border-radius: 25px;
+			height: 35px;
+			border: none;
+			background-color: #dfe7ef9C;
+			padding: 0px 20px;
+		}
+	}
+
+	.tracks {
+		padding: 10px 0;
+    height: 100%;
+	}
+
+	.trackWrapper {
+		display: flex;
+		padding: 5px 15px;
+
+		.image {
+			display: flex;
+
+			img {
+				width: 50px;
+				height: 50px;
+				border-radius: 10px;
+			}
+		}
+
+		.trackInfo {
+			display: flex;
+			flex-direction: column;
+			align-self: center;
+			width: 100%;
+    	padding: 0 10px;	
+		}
 	}
 }

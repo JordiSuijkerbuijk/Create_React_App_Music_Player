@@ -13,7 +13,7 @@ function calculateAudioDuration(duration) {
 }
 
 function Slider({ audio, isPlaying, setStartPlayingAt }) {
-  const [currentTime, setCurrentTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState('0:00');
   const audioDuration = calculateAudioDuration(audio.duration);
   const animationFrame = useRef(null);
 
