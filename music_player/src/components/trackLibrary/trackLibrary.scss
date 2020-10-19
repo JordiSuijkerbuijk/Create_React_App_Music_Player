@@ -11,6 +11,7 @@
 		background-color: #eef3f7;
 		border-radius: 30px;
 		overflow: scroll;
+		max-width: 600px;
 	}
 
 	.searchWrapper {
@@ -19,7 +20,7 @@
 
 		.search {
 			margin-top: 15px;
-			width: 75%;
+			width: 85%;
 			border-radius: 25px;
 			height: 35px;
 			border: none;
@@ -52,7 +53,8 @@
 			flex-direction: column;
 			align-self: center;
 			width: 100%;
-    	padding: 0 10px;	
+			padding: 0 10px;	
+			cursor: pointer;
 		}
 	}
 }

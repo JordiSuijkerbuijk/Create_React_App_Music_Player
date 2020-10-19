@@ -6,6 +6,7 @@ function TrackLibrary() {
   const [token, setToken] = useState(null);
   const [tracks, setTracks] = useState([]);
   const [authCode, setAuthCode] = useState(null);
+  const [trackUri, setTrackUri] = useState('');
 
   useEffect(() => {
     if (!(window.location.search && window.location.search.split('=')[1])) {
@@ -32,6 +33,7 @@ function TrackLibrary() {
       const clientSecret = 'a63adf4bf3c347279b9fd30c2999da05';
       const redirect_uri = 'http://localhost:3000/callback';
       const grantType = 'authorization_code';
+      // const scopes = 'user-read-playback-state'
 
       fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -43,6 +45,7 @@ function TrackLibrary() {
       })
         .then((response) => response.json())
         .then((data) => {
+          console.log(data);
           setToken(data.access_token);
         });
     }
@@ -67,8 +70,70 @@ function TrackLibrary() {
       },
     })
       .then((response) => response.json())
-      .then((data) => data.tracks && data.tracks.items && setTracks(data.tracks.items));
+      .then((data) => {
+        data.tracks && data.tracks.items && setTracks(data.tracks.items)
+      });
   }
+
+  // function getDevices() {
+  //   fetch(`https://api.spotify.com/v1/me/player/devices`, {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //     });
+  // } 
+
+function checkForPlayer() {
+    if (window.Spotify !== null) {
+      const player = new window.Spotify.Player({
+        name: "Matt's Spotify Player",
+        getOAuthToken: cb => { cb(token); },
+      });
+      // this.createEventHandlers();
+  
+      // finally, connect!
+      player.connect();
+    }
+  }
+
+  useEffect(() => {
+    console.log(window.Player)
+  }, []);
+
+  // const play = ({
+  //   spotify_uri,
+  //   playerInstance: {
+  //     _options: {
+  //       getOAuthToken,
+  //       id
+  //     }
+  //   }
+  // }) => {
+  //   getOAuthToken(token => {
+  //     fetch(`https://api.spotify.com/v1/me/player/play?device_id=${id}`, {
+  //       method: 'PUT',
+  //       body: JSON.stringify({ uris: [spotify_uri] }),
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${token}`
+  //       },
+  //     });
+  //   });
+  // };
+  
+  // play({
+  //   playerInstance: "Web Playback SDK Quick Start Player",
+  //   spotify_uri: 'spotify:track:7xGfFoTpQ2E7fRF5lN10tr',
+  // });
+
+
+
 
   return (
     <div className="trackLibrary">
@@ -83,7 +148,7 @@ function TrackLibrary() {
                 <div className="image">
                   <img src={item.album.images[0].url} />
                 </div>
-                <div className="trackInfo">
+                <div className="trackInfo" onClick={() => setTrackUri(item)}>
                   <div className="name">{item.name}</div>
                   <div className="artist">{item.artists[0].name}</div>
                 </div>
