@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import config from dotenv
 
 import './trackLibrary.scss';
 
@@ -7,6 +8,8 @@ function TrackLibrary() {
   const [tracks, setTracks] = useState([]);
   const [authCode, setAuthCode] = useState(null);
   const [trackUri, setTrackUri] = useState('');
+
+  console.log('config', config);
 
   useEffect(() => {
     if (!(window.location.search && window.location.search.split('=')[1])) {

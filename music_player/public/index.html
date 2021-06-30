@@ -44,9 +44,15 @@
     <script>
       window.onSpotifyWebPlaybackSDKReady = () => {
         // You can now initialize Spotify.Player and use the SDK
-        window.onSpotifyWebPlaybackSDKReady = () => {
-          window.Spotify = Spotify;
-        }
+        var player = new Spotify.Player({
+          name: 'test player',
+          getOAuthToken: callback => {
+            // Run code to get a fresh access token
+
+            callback('access token here');
+          },
+          volume: 1.0
+        });
       };
       </script>
   </body>
